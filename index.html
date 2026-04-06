@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Loja - Inspirado no Enjoei</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+        body { font-family: 'Inter', sans-serif; background-color: #fcfcfc; margin: 0; padding: 0; color: #222; }
+        
+        /* Cabeçalho Fixo para facilitar o scroll */
+        header { position: sticky; top: 0; background: white; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 15px 40px; border-bottom: 1px solid #f0f0f0; }
+        .logo { font-size: 24px; font-weight: 700; color: #7b2cbf; letter-spacing: -1px; }
+        .search-bar { background-color: #f4f4f5; border: none; padding: 12px 20px; border-radius: 25px; width: 350px; font-family: inherit; font-size: 14px; outline: none; transition: background 0.3s; }
+        .search-bar:focus { background-color: #e9ecef; }
+        
+        /* Barra de Filtros Interativa */
+        .filters { padding: 15px 40px; display: flex; gap: 12px; overflow-x: auto; white-space: nowrap; }
+        .filter-btn { padding: 8px 18px; border: 1px solid #e0e0e0; border-radius: 20px; font-size: 14px; color: #555; background: white; cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+        .filter-btn:hover { border-color: #7b2cbf; color: #7b2cbf; }
+        .filter-btn.active { background-color: #7b2cbf; color: white; border-color: #7b2cbf; font-weight: 500; }
+
+        /* Grid de Produtos */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 40px; min-height: 80vh; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+        
+        /* Card do Produto */
+        .card { cursor: pointer; transition: transform 0.2s ease; animation: fadeIn 0.4s ease; }
+        .card:hover { transform: translateY(-4px); }
+        .img-container { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 4 / 5; background-color: #f0f0f0; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Badges de Destaque */
+        .badge-likes { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; color: #e63946; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .badge-status { position: absolute; bottom: 12px; left: 12px; background: #caffbf; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; color: #111; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Informações do Produto */
+        .info { padding: 12px 4px; }
+        .price { font-size: 18px; font-weight: 700; color: #7b2cbf; margin: 0 0 4px 0; }
+        .title { font-size: 14px; color: #444; margin: 0 0 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .category-text { font-size: 12px; color: #999; }
+
+        /* Animação suave para os filtros */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="top-bar">
+            <div class="logo">desapegos.</div>
+            <input type="text" class="search-bar" placeholder="busque por bolsas, relógios...">
+        </div>
+        <div class="filters" id="botoes-filtro">
+            <button class="filter-btn active" onclick="filtrar('todos')">tudo</button>
+            <button class="filter-btn" onclick="filtrar('bolsas')">bolsas</button>
+            <button class="filter-btn" onclick="filtrar('relogios')">relógios</button>
+            <button class="filter-btn" onclick="filtrar('oculos')">óculos</button>
+            <button class="filter-btn" onclick="filtrar('roupas')">roupas</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="grid" id="vitrine">
+            </div>
+    </div>
+
+    <script>
+        // Banco de dados simulado com categorias para os filtros funcionarem
+        const produtos = [
+            { id: 1, categoria: "bolsas", titulo: "bolsa de couro transversal preta", preco: "R$ 299", likes: 24, status: "novidade", img: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=400&q=80" },
+            { id: 2, categoria: "relogios", titulo: "relógio analógico dourado vintage", preco: "R$ 180", likes: 12, status: "20% off", img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&q=80" },
+            { id: 3, categoria: "oculos", titulo: "óculos de sol gatinho tartaruga", preco: "R$ 95", likes: 45, status: "quase sem uso", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80" },
+            { id: 4, categoria: "bolsas", titulo: "mochila de lona verde militar", preco: "R$ 150", likes: 8, status: "", img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" },
+            { id: 5, categoria: "relogios", titulo: "relógio smartwatch esportivo preto", preco: "R$ 450", likes: 33, status: "na caixa", img: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&q=80" },
+            { id: 6, categoria: "bolsas", titulo: "bolsa tote bag bege minimalista", preco: "R$ 210", likes: 56, status: "novidade", img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&q=80" },
+            { id: 7, categoria: "roupas", titulo: "jaqueta jeans oversized unissex", preco: "R$ 120", likes: 19, status: "", img: "https://images.unsplash.com/photo-1601333144130-8c1f12369685?w=400&q=80" },
+            { id: 8, categoria: "oculos", titulo: "óculos aviador clássico prata", preco: "R$ 110", likes: 7, status: "15% off", img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80" },
+            { id: 9, categoria: "bolsas", titulo: "clutch de festa com brilhos", preco: "R$ 85", likes: 41, status: "usado 1x", img: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&q=80" },
+            { id: 10, categoria: "relogios", titulo: "relógio prata minimalista fundo branco", preco: "R$ 300", likes: 22, status: "", img: "https://images.unsplash.com/photo-1508656937041-ed3a81752361?w=400&q=80" }
+        ];
+
+        // Função para desenhar os produtos na tela
+        function renderizar(itens) {
+            const vitrine = document.getElementById('vitrine');
+            vitrine.innerHTML = ''; 
+
+            itens.forEach(produto => {
+                const statusBadge = produto.status ? `<span class="badge-status">${produto.status}</span>` : '';
+                
+                vitrine.innerHTML += `
+                    <div class="card" onclick="alert('Aqui abriria a página do produto: ${produto.titulo}')">
+                        <div class="img-container">
+                            <img src="${produto.img}" alt="${produto.titulo}">
+                            <span class="badge-likes">❤️ ${produto.likes}</span>
+                            ${statusBadge}
+                        </div>
+                        <div class="info">
+                            <p class="price">${produto.preco}</p>
+                            <p class="title">${produto.titulo}</p>
+                            <p class="category-text">${produto.categoria}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Função para filtrar os produtos ao clicar nos botões
+        function filtrar(categoriaSelecionada) {
+            // Atualiza o visual do botão ativo
+            const botoes = document.querySelectorAll('.filter-btn');
+            botoes.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtra o array de produtos
+            if (categoriaSelecionada === 'todos') {
+                renderizar(produtos);
+            } else {
+                const produtosFiltrados = produtos.filter(p => p.categoria === categoriaSelecionada);
+                renderizar(produtosFiltrados);
+            }
+        }
+
+        // Renderiza tudo ao abrir a página pela primeira vez
+        renderizar(produtos);
+    </script>
+</body>
+</html>
