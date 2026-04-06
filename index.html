@@ -20,7 +20,8 @@
         .search-icon { position: absolute; left: 15px; top: 12px; color: #999; }
         
         .header-actions { display: flex; align-items: center; gap: 20px; }
-        .sacola { position: relative; font-size: 20px; cursor: pointer; }
+        .sacola { position: relative; font-size: 22px; cursor: pointer; transition: transform 0.2s; }
+        .sacola:hover { transform: scale(1.1); }
         .sacola-count { position: absolute; top: -8px; right: -10px; background: #e63946; color: white; font-size: 11px; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
         /* Filtros */
@@ -37,34 +38,58 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
         
         /* Card */
-        .card { cursor: pointer; transition: transform 0.2s ease; animation: fadeIn 0.4s ease; }
+        .card { cursor: pointer; transition: transform 0.2s ease; animation: fadeIn 0.4s ease; position: relative; }
         .card:hover { transform: translateY(-4px); }
         .img-container { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 5; background-color: #f0f0f0; }
         .img-container img { width: 100%; height: 100%; object-fit: cover; }
         .badge-likes { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 4px 8px; border-radius: 15px; font-size: 12px; font-weight: 600; color: #e63946; }
-        .info { padding: 12px 4px; }
+        .info { padding: 12px 4px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .info-texto { flex: 1; overflow: hidden; }
         .price { font-size: 18px; font-weight: 700; color: #7b2cbf; margin: 0 0 4px 0; }
         .title { font-size: 13px; color: #444; margin: 0 0 4px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        /* Botão Compra Rápida */
+        .btn-quick-add { background: #f0f0f0; border: none; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: all 0.2s; margin-left: 10px; color: #7b2cbf; }
+        .btn-quick-add:hover { background: #7b2cbf; color: white; transform: scale(1.1); }
 
         /* Página do Produto (Detalhes) */
         #produto-detalhe { display: none; animation: fadeIn 0.3s ease; }
         .btn-voltar { background: none; border: none; color: #7b2cbf; font-weight: 600; font-size: 15px; cursor: pointer; margin-bottom: 20px; padding: 0; font-family: inherit; }
         .detalhe-layout { display: flex; gap: 40px; }
-        .detalhe-img { flex: 1; max-width: 500px; border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; }
+        .galeria { flex: 1; max-width: 500px; }
+        .detalhe-img { border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; margin-bottom: 15px; }
         .detalhe-img img { width: 100%; height: 100%; object-fit: cover; }
-        .detalhe-info { flex: 1; padding-top: 20px; }
+        .thumbs { display: flex; gap: 10px; }
+        .thumbs img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: border 0.2s; }
+        .thumbs img:hover, .thumbs img.active { border-color: #7b2cbf; }
+        
+        .detalhe-info { flex: 1; padding-top: 10px; }
         .detalhe-titulo { font-size: 24px; margin: 0 0 10px 0; color: #333; }
         .detalhe-preco { font-size: 32px; font-weight: 700; color: #7b2cbf; margin: 0 0 20px 0; }
         .detalhe-desc { font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 30px; }
         .btn-comprar { width: 100%; padding: 18px; background-color: #cfff45; color: #111; border: none; border-radius: 25px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.2s; }
         .btn-comprar:hover { opacity: 0.8; }
 
-        /* Toast (Aviso flutuante) */
-        #toast { position: fixed; bottom: -50px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 25px; font-size: 14px; font-weight: 500; transition: bottom 0.3s ease; z-index: 1000; }
+        /* Carrinho Lateral (Gaveta) */
+        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; display: none; opacity: 0; transition: opacity 0.3s; }
+        #carrinho-lateral { position: fixed; top: 0; right: -400px; width: 100%; max-width: 380px; height: 100%; background: white; z-index: 1000; box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: right 0.3s ease; display: flex; flex-direction: column; }
+        .carrinho-header { padding: 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .carrinho-header h2 { margin: 0; font-size: 18px; color: #7b2cbf; }
+        .btn-fechar { background: none; border: none; font-size: 20px; cursor: pointer; color: #666; }
+        .carrinho-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .carrinho-item { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #f9f9f9; padding-bottom: 15px; }
+        .carrinho-item img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
+        .carrinho-item-info { flex: 1; }
+        .carrinho-item-titulo { font-size: 13px; color: #444; margin: 0 0 5px 0; }
+        .carrinho-item-preco { font-size: 15px; font-weight: 700; color: #7b2cbf; margin: 0; }
+        .btn-remover { background: none; border: none; color: #e63946; font-size: 12px; cursor: pointer; padding: 0; margin-top: 8px; text-decoration: underline; }
+        .carrinho-vazio { text-align: center; color: #999; margin-top: 50px; }
+        
+        .carrinho-footer { padding: 20px; border-top: 1px solid #f0f0f0; background: #fafafa; }
+        .carrinho-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #333; }
+        .btn-finalizar { width: 100%; padding: 15px; background-color: #7b2cbf; color: white; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; }
 
-        /* Mensagem de Vazio */
         .empty-state { text-align: center; padding: 50px; color: #888; width: 100%; grid-column: 1 / -1; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -80,7 +105,7 @@
             </div>
 
             <div class="header-actions">
-                <div class="sacola" onclick="alert('Indo para finalização da compra!')">
+                <div class="sacola" onclick="abrirCarrinho()">
                     🛍️ <span class="sacola-count" id="contador-sacola">0</span>
                 </div>
             </div>
@@ -102,34 +127,100 @@
         <div id="produto-detalhe">
             <button class="btn-voltar" onclick="voltarParaVitrine()">← voltar para vitrine</button>
             <div class="detalhe-layout">
-                <div class="detalhe-img">
-                    <img id="detalhe-img-src" src="" alt="">
+                <div class="galeria">
+                    <div class="detalhe-img">
+                        <img id="detalhe-img-src" src="" alt="">
+                    </div>
+                    <div class="thumbs" id="detalhe-thumbs">
+                        </div>
                 </div>
                 <div class="detalhe-info">
                     <h1 class="detalhe-titulo" id="detalhe-titulo"></h1>
                     <p class="detalhe-preco" id="detalhe-preco"></p>
                     <p class="detalhe-desc" id="detalhe-desc"></p>
-                    <button class="btn-comprar" onclick="adicionarASacola()">eu quero! (adicionar à sacola)</button>
+                    <button class="btn-comprar" onclick="adicionarASacolaPeloDetalhe()">eu quero! (adicionar à sacola)</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="toast">Produto adicionado à sacola! 🛍️</div>
+    <div id="overlay" onclick="fecharCarrinho()"></div>
+    <div id="carrinho-lateral">
+        <div class="carrinho-header">
+            <h2>minha sacola</h2>
+            <button class="btn-fechar" onclick="fecharCarrinho()">✖</button>
+        </div>
+        <div class="carrinho-body" id="carrinho-itens">
+            </div>
+        <div class="carrinho-footer">
+            <div class="carrinho-total">
+                <span>total:</span>
+                <span id="carrinho-total-valor">R$ 0,00</span>
+            </div>
+            <button class="btn-finalizar" onclick="alert('Redirecionando para pagamento seguro!')">finalizar compra</button>
+        </div>
+    </div>
 
     <script>
-        // Banco de dados simulado
+        // Formata número para moeda Real
+        const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        // Banco de dados simulado com múltiplas imagens e preço numérico
         const produtos = [
-            { id: 1, categoria: "bolsas", titulo: "bolsa de couro transversal preta", preco: "R$ 299", likes: 24, img: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&q=80", desc: "Bolsa clássica, usada pouquíssimas vezes. Perfeita para o dia a dia. Alça ajustável e interior intacto." },
-            { id: 2, categoria: "relogios", titulo: "relógio analógico dourado", preco: "R$ 180", likes: 12, img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80", desc: "Relógio vintage muito elegante. Acompanha caixa original. Precisa apenas trocar a bateria." },
-            { id: 3, categoria: "oculos", titulo: "óculos de sol gatinho tartaruga", preco: "R$ 95", likes: 45, img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80", desc: "Super estiloso! Estampa de tartaruga e lentes com proteção UV. Sem nenhum arranhão." },
-            { id: 4, categoria: "bolsas", titulo: "mochila de lona verde militar", preco: "R$ 150", likes: 8, img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80", desc: "Mochila resistente, cabe notebook. Ideal para faculdade ou trilhas curtas." },
-            { id: 5, categoria: "relogios", titulo: "smartwatch esportivo preto", preco: "R$ 450", likes: 33, img: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80", desc: "Na caixa, nunca usado. Monitora batimentos, sono e diversas atividades físicas." },
-            { id: 6, categoria: "roupas", titulo: "jaqueta jeans oversized", preco: "R$ 120", likes: 19, img: "https://images.unsplash.com/photo-1601333144130-8c1f12369685?w=500&q=80", desc: "Jaqueta super confortável, pegada anos 90. Fica linda com qualquer look." }
+            { 
+                id: 1, categoria: "bolsas", titulo: "bolsa de couro transversal preta", preco: 299.00, likes: 24, 
+                imagens: [
+                    "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&q=80",
+                    "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=500&q=80",
+                    "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80"
+                ], 
+                desc: "Bolsa clássica, usada pouquíssimas vezes. Perfeita para o dia a dia. Alça ajustável e interior intacto." 
+            },
+            { 
+                id: 2, categoria: "relogios", titulo: "relógio analógico dourado", preco: 180.00, likes: 12, 
+                imagens: [
+                    "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500&q=80",
+                    "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=500&q=80"
+                ], 
+                desc: "Relógio vintage muito elegante. Acompanha caixa original. Precisa apenas trocar a bateria." 
+            },
+            { 
+                id: 3, categoria: "oculos", titulo: "óculos de sol gatinho tartaruga", preco: 95.00, likes: 45, 
+                imagens: [
+                    "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80",
+                    "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&q=80"
+                ], 
+                desc: "Super estiloso! Estampa de tartaruga e lentes com proteção UV. Sem nenhum arranhão." 
+            },
+            { 
+                id: 4, categoria: "bolsas", titulo: "mochila de lona verde militar", preco: 150.00, likes: 8, 
+                imagens: ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80"], 
+                desc: "Mochila resistente, cabe notebook. Ideal para faculdade ou trilhas curtas." 
+            },
+            { 
+                id: 5, categoria: "relogios", titulo: "smartwatch esportivo preto", preco: 450.00, likes: 33, 
+                imagens: ["https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&q=80"], 
+                desc: "Na caixa, nunca usado. Monitora batimentos, sono e diversas atividades físicas." 
+            },
+            { 
+                id: 6, categoria: "roupas", titulo: "jaqueta jeans oversized", preco: 120.00, likes: 19, 
+                imagens: ["https://images.unsplash.com/photo-1601333144130-8c1f12369685?w=500&q=80"], 
+                desc: "Jaqueta super confortável, pegada anos 90. Fica linda com qualquer look." 
+            },
+            { 
+                id: 7, categoria: "bolsas", titulo: "bolsa tote bag de palha", preco: 110.00, likes: 55, 
+                imagens: ["https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=500&q=80"], 
+                desc: "Perfeita para a praia ou passeios no verão. Muito espaçosa." 
+            },
+            { 
+                id: 8, categoria: "roupas", titulo: "camisa social de linho branca", preco: 85.00, likes: 14, 
+                imagens: ["https://images.unsplash.com/photo-1596755094514-f87e32f85e2c?w=500&q=80"], 
+                desc: "Linho puro, fresquinha. Usada apenas em uma festa de ano novo." 
+            }
         ];
 
         let categoriaAtual = 'todos';
-        let itensNaSacola = 0;
+        let sacola = []; // Array que guarda os itens do carrinho
         let produtoAbertoAtualmente = null;
 
         // Renderiza a Vitrine
@@ -146,88 +237,146 @@
                 vitrine.innerHTML += `
                     <div class="card" onclick="abrirProduto(${produto.id})">
                         <div class="img-container">
-                            <img src="${produto.img}" alt="${produto.titulo}">
+                            <img src="${produto.imagens[0]}" alt="${produto.titulo}">
                             <span class="badge-likes">❤️ ${produto.likes}</span>
                         </div>
                         <div class="info">
-                            <p class="price">${produto.preco}</p>
-                            <p class="title">${produto.titulo}</p>
+                            <div class="info-texto">
+                                <p class="price">${formatarMoeda(produto.preco)}</p>
+                                <p class="title">${produto.titulo}</p>
+                            </div>
+                            <button class="btn-quick-add" onclick="adicionarASacolaPelaVitrine(event, ${produto.id})" title="Adicionar à sacola">🛒+</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Filtra por Categoria
+        // Filtros e Pesquisa
         function filtrar(categoriaSelecionada) {
             categoriaAtual = categoriaSelecionada;
-            document.getElementById('input-pesquisa').value = ''; // Limpa a barra de busca ao usar botões
-
-            // Atualiza botões
+            document.getElementById('input-pesquisa').value = ''; 
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-
             let filtrados = categoriaAtual === 'todos' ? produtos : produtos.filter(p => p.categoria === categoriaAtual);
             renderizar(filtrados);
         }
 
-        // Pesquisa Funcional
         function pesquisar() {
             const termo = document.getElementById('input-pesquisa').value.toLowerCase();
-            
             let produtosNaTela = categoriaAtual === 'todos' ? produtos : produtos.filter(p => p.categoria === categoriaAtual);
             let filtradosPorNome = produtosNaTela.filter(p => p.titulo.toLowerCase().includes(termo));
-            
             renderizar(filtradosPorNome);
         }
 
-        // Botão Limpar Filtros
         function limparFiltros() {
             document.getElementById('input-pesquisa').value = '';
-            document.querySelector('.filter-btn').click(); // Simula o clique no botão "tudo"
+            document.querySelector('.filter-btn').click(); 
+        }
+
+        // Sistema de Múltiplas Imagens na página do Produto
+        function trocarImagem(src, element) {
+            document.getElementById('detalhe-img-src').src = src;
+            document.querySelectorAll('.thumbs img').forEach(img => img.classList.remove('active'));
+            element.classList.add('active');
         }
 
         // Abre a Tela do Produto Específico
         function abrirProduto(id) {
             produtoAbertoAtualmente = produtos.find(p => p.id === id);
             
-            // Preenche os dados
-            document.getElementById('detalhe-img-src').src = produtoAbertoAtualmente.img;
+            document.getElementById('detalhe-img-src').src = produtoAbertoAtualmente.imagens[0];
             document.getElementById('detalhe-titulo').innerText = produtoAbertoAtualmente.titulo;
-            document.getElementById('detalhe-preco').innerText = produtoAbertoAtualmente.preco;
+            document.getElementById('detalhe-preco').innerText = formatarMoeda(produtoAbertoAtualmente.preco);
             document.getElementById('detalhe-desc').innerText = produtoAbertoAtualmente.desc;
 
-            // Altera as visibilidades
+            // Gera as miniaturas (thumbs)
+            const thumbsContainer = document.getElementById('detalhe-thumbs');
+            thumbsContainer.innerHTML = produtoAbertoAtualmente.imagens.map((img, index) => 
+                `<img src="${img}" class="${index === 0 ? 'active' : ''}" onclick="trocarImagem('${img}', this)">`
+            ).join('');
+
             document.getElementById('vitrine').style.display = 'none';
             document.getElementById('barra-filtros').style.display = 'none';
             document.getElementById('produto-detalhe').style.display = 'block';
-            window.scrollTo(0, 0); // Joga a tela pro topo
+            window.scrollTo(0, 0);
         }
 
-        // Volta para a Vitrine
         function voltarParaVitrine() {
             document.getElementById('produto-detalhe').style.display = 'none';
             document.getElementById('vitrine').style.display = 'grid';
             document.getElementById('barra-filtros').style.display = 'flex';
         }
 
-        // Simula Adicionar à Sacola
-        function adicionarASacola() {
-            itensNaSacola++;
-            document.getElementById('contador-sacola').innerText = itensNaSacola;
+        // Funções do Carrinho
+        function adicionarASacolaPelaVitrine(event, id) {
+            event.stopPropagation(); // Impede que o card abra a página de detalhes
+            const produto = produtos.find(p => p.id === id);
+            sacola.push(produto);
+            atualizarCarrinho();
+            abrirCarrinho();
+        }
+
+        function adicionarASacolaPeloDetalhe() {
+            sacola.push(produtoAbertoAtualmente);
+            atualizarCarrinho();
+            abrirCarrinho();
+        }
+
+        function removerDoCarrinho(index) {
+            sacola.splice(index, 1); // Remove o item pelo índice
+            atualizarCarrinho();
+        }
+
+        function atualizarCarrinho() {
+            // Atualiza a bolinha vermelha no topo
+            document.getElementById('contador-sacola').innerText = sacola.length;
             
-            // Mostra o Toast
-            const toast = document.getElementById('toast');
-            toast.style.bottom = '20px';
+            const containerItens = document.getElementById('carrinho-itens');
+            containerItens.innerHTML = '';
+            let total = 0;
+
+            if (sacola.length === 0) {
+                containerItens.innerHTML = '<div class="carrinho-vazio">Sua sacola está vazia. 🥲</div>';
+            } else {
+                sacola.forEach((item, index) => {
+                    total += item.preco;
+                    containerItens.innerHTML += `
+                        <div class="carrinho-item">
+                            <img src="${item.imagens[0]}" alt="${item.titulo}">
+                            <div class="carrinho-item-info">
+                                <p class="carrinho-item-titulo">${item.titulo}</p>
+                                <p class="carrinho-item-preco">${formatarMoeda(item.preco)}</p>
+                                <button class="btn-remover" onclick="removerDoCarrinho(${index})">Remover</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
             
+            // Atualiza o valor total no rodapé do carrinho
+            document.getElementById('carrinho-total-valor').innerText = formatarMoeda(total);
+        }
+
+        function abrirCarrinho() {
+            document.getElementById('overlay').style.display = 'block';
             setTimeout(() => {
-                toast.style.bottom = '-50px';
-                voltarParaVitrine(); // Volta para a lista para continuar comprando
-            }, 2500);
+                document.getElementById('overlay').style.opacity = '1';
+                document.getElementById('carrinho-lateral').style.right = '0';
+            }, 10);
+        }
+
+        function fecharCarrinho() {
+            document.getElementById('carrinho-lateral').style.right = '-400px';
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('overlay').style.display = 'none';
+            }, 300);
         }
 
         // Inicializa a página
         renderizar(produtos);
+        atualizarCarrinho(); // Garante que o carrinho comece vazio
     </script>
 </body>
 </html>
